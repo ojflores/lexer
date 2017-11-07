@@ -8,18 +8,22 @@ using namespace std;
 
 class Lexer{
 	private:
-		string file;
+		const char* file;
+		string array[10000];
+		int counter;
 	public:
 		
 		
 		//constructor
-		Lexer(string text_file);
+		Lexer(const char*);
 		
 		//takes the input and finds what token it is classified as
 		void GetToken();
 		
 		//prints array
 		void printArray();
+		
+		void openFile();
 	
 	
 };
