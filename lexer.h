@@ -4,12 +4,14 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#define SIZE 10000
 using namespace std;
 
 class Lexer{
 	private:
 		const char* file;
-		string array[10000];
+		string array[SIZE];
+		string pulled_apart[SIZE];
 		int counter;
 	public:
 		
