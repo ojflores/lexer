@@ -14,6 +14,7 @@ class Lexer{
 		string array[SIZE];
 		string pulled_apart[SIZE];
 		int counter;
+		int point;
 		string punkTokens[22];
 		struct {
 			string* word;

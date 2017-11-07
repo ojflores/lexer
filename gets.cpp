@@ -3,7 +3,7 @@
 Lexer::Lexer(const char* x){
 	file = x;
 	counter = 0;
-	
+	point = 0;
 }
 
 void Lexer::GetToken(){}
@@ -47,12 +47,17 @@ void Lexer::lexemeGenerator(){
 				token = punkTokens[p];
 				compare = words[n];
 				if(token == compare){
-					cout << token << endl;
+					//cout << token << endl;
+					pulled_apart[point] = token;
+					point++;
 					words.erase(n, 1);
-					cout << words << endl;
+					//cout << words << endl;
+					
 				}
 				
 			}
+		pulled_apart[point] = compare;
+		point++;
 		}
 		
 	}
