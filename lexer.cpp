@@ -13,15 +13,21 @@ int main(int argc, const char * argv[]){
 	readFile.open(argv[1]);
 	string word;
 	
-	Lexer A;
 	
+	Lexer A(argv[1]);
+	string array[1000];
 	if (readFile.is_open()){
 		while(readFile >> word){
-			
-			cout << word << endl;
+			array[x] = word;
 			x++;
 		}
 	}
+	int i = 0;
+	while(i < x){
+		cout << array[i] << endl;
+		i++;
+	}
+	
 	readFile.close();
 	
 	cout << x << endl;
