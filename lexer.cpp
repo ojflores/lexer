@@ -12,8 +12,8 @@ int main(int argc, const char * argv[]){
 	
 	Lexer A(argv[1]);
 	A.openFile();
-	A.printArray();
-	
+	//A.printArray();
+	A.lexemeGenerator();
 	
 
 	

@@ -3,6 +3,7 @@
 Lexer::Lexer(const char* x){
 	file = x;
 	counter = 0;
+	
 }
 
 void Lexer::GetToken(){}
@@ -28,3 +29,58 @@ void Lexer::openFile(){
 		}
 	}
 }
+
+void Lexer::lexemeGenerator(){
+	int n, p;
+	int i = 0;
+	int word_length;
+	
+	string words;
+	string punkTokens[23] = {"&", "^", "|", ":", ",", ".", "=", ">", "{", "[", "(", "<", "-", "#", "+", "}", "]", ")", ";", "~", "/", "*"};
+	string token;
+	string compare;
+	for(i = 0; i < counter; i++){
+		words = array[i];
+		word_length = words.size();
+		for(n = 0; n < word_length; n++){
+			for(p = 0; p < 23; p++){
+				token = punkTokens[p];
+				compare = words[n];
+				if(token == compare){
+					cout << token << endl;
+					words.erase(n, 1);
+					cout << words << endl;
+				}
+				
+			}
+		}
+		
+	}
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
