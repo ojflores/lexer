@@ -1,6 +1,7 @@
 #include "lexer.h"
 #define KEYWORD 41
 #define PUNK 22
+#define MAX_LENGTH 40
 //how the functions do what they do
 //g++ lexer.cpp gets.cpp -o lexer
 Lexer::Lexer(const char* x){
@@ -44,6 +45,17 @@ void Lexer::GetToken(string word, string character){
 }
 
 void Lexer::tokenize_var(string word, string character){
+	int i;
+	if(word.length() > MAX_LENGTH){
+		cout << "ID length is too long. 40 characters max\n";
+		for(i = 0; i < MAX_LENGTH; i++){
+			cout << word[i];
+		}
+		cout << endl;
+	}
+	else{
+		cout << word << " T_ID\n";
+	}
 	
 	return;
 }
@@ -88,7 +100,7 @@ void Lexer::tokenize_keyword(string word, string character){
 		}
 	}
 	if(i == KEYWORD){
-		cout << word << " T_ID" << endl;
+		tokenize_var(word, character);
 	}
 	
 	
