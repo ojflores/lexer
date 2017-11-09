@@ -49,6 +49,12 @@ class Lexer{
 		void check_array();
 		
 		void tokenize_keyword(string, string);
+		
+		void tokenize_var(string, string);
+		
+		void tokenize_number(string, string);
+		
+		void tokenize_punk(string, string);
 	
 	
 };
