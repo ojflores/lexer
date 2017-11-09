@@ -1,0 +1,5 @@
+ARRAY;THIS IS WHAT THE )() THING CAN DO
+::: ;; 
+ELSE(){
+	hello world
+} WHATELSEDO
