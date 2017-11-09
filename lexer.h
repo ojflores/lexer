@@ -41,6 +41,8 @@ class Lexer{
 		void lexemeGenerator();
 		
 		void print_pulled_apart();
+		
+		void check_array();
 	
 	
 };

@@ -7,7 +7,12 @@ Lexer::Lexer(const char* x){
 	point = 0;
 }
 
-void Lexer::GetToken(){}
+void Lexer::GetToken(){
+	int i = 0;
+	if(pulled_apart[i].length() > 0){
+		return;
+	}
+}
 
 void Lexer::printArray(){
 	int i = 0;
@@ -56,22 +61,15 @@ void Lexer::lexemeGenerator(){
 					point++;
 					break;
 				}
-			
 			}
 			if(point_break == 0){
 				pulled_apart[point] += compare;
 			}
-			
-			
 		}
-		point++;
-		
-		
-	}
-	
-	
-	
+		point++;	
+	}	
 }
+
 
 
 
