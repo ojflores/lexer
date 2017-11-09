@@ -45,19 +45,27 @@ void Lexer::lexemeGenerator(){
 	for(i = 0; i < counter; i++){				//for each item in the array
 		words = array[i];						//puts the item in array[i] in words
 		
-		for(b = 0; b < words.length(); b++){
+		for(b = 0; b < words.length(); b++){	//for every character in the string
 			int point_break = 0;
 			compare = words[b];
-			for(p = 0; p < 22; p++){
+			for(p = 0; p < 22; p++){			//compare with every char in the punkTokens array
 				if(compare == punkTokens[p]){
 					point++;
 					point_break = 1;
-					pulled_apart[point] = compare;
+					pulled_apart[point] += compare;
+					point++;
 					break;
 				}
+			
+			}
+			if(point_break == 0){
+				pulled_apart[point] += compare;
 			}
 			
+			
 		}
+		point++;
+		
 		
 	}
 	
