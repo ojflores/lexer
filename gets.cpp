@@ -47,21 +47,42 @@ void Lexer::GetToken(string word, string character){
 void Lexer::tokenize_var(string word, string character){
 	int i;
 	if(word.length() > MAX_LENGTH){
-		cout << "ID length is too long. 40 characters max\n";
+		cout << "     ID length is too long. 40 characters max\n";
 		for(i = 0; i < MAX_LENGTH; i++){
 			cout << word[i];
 		}
 		cout << endl;
 	}
 	else{
-		cout << word << " T_ID\n";
+		cout << word << "     T_ID\n";
 	}
 	
 	return;
 }
 
 void Lexer::tokenize_number(string word, string character){
-	cout << word << endl;
+	int i, n = 0;
+	int wlength = word.length();
+	string compare, zero = "0";
+	compare = word[wlength-1];
+	if(wlength > 10){
+		cout << word << "     integer literal too long\n";
+		for(i = 0; i < 10; i++){
+			cout << word[i];
+		}
+		cout << "H\n";
+	}
+	else if(compare != "H"){
+		cout << word;
+		cout << "     illegal hex integer literal\n";
+	}
+	else{										//does not take off leading zeros
+		for(n; n < word.length(); n++){
+			cout << word[n];
+		}
+		 cout << "      T_INT_LITERAL";
+	}
+	cout << endl;
 	return;
 }
 
@@ -72,12 +93,12 @@ void Lexer::tokenize_punk(string word, string character){
 	int i;
 	for(i = 0; i < PUNK; i++){
 		if(word == punkTokens[i]){
-			cout << word << " " << punkTokens_t[i] << endl;
+			cout << word << "     " << punkTokens_t[i] << endl;
 			break;
 		}
 	}
 	if( i == PUNK){
-		cout << word << " << I'm sorry but that is an illegal symbol\n";
+		cout << word << "      << I'm sorry but that is an illegal symbol\n";
 	}
 	
 	
@@ -92,19 +113,30 @@ void Lexer::tokenize_keyword(string word, string character){
 	string token_t[KEYWORD] = {"T_ARRAY", "T_BEGIN", "T_BY", "T_BOOLEAN", "T_CASE", "T_ONST", "T_CHAR", "T_DIV", "T_DO", "T_ELSE", "T_ELSIF", "T_END", "T_EXIT", "T_FOR", "T_FALSE", "T_IF", "T_IMPORT",
 	"T_IN", "T_IS", "T_INTEGER", "T_LOOP", "T_MOD", "T_MODULE", "T_NIL", "T_NEW", "T_OF", "T_OR", "T_POINTER", "T_PROCEDURE", "T_RECORD", "T_REAL", "T_REPEAT", "T_RETURN", "T_THEN", "T_TO",
 	"T_TYPE", "T_TRUE", "T_UNTIL", "T_VAR", "T_WHILE", "T_WITH"};
+	
+	
+	int wlength = word.length();
+	string compare;
+	compare = word[wlength-1];
+	
+	
+	if((compare == "X") && (word.length() <= 4)){
+		cout << word << "     T_CHAR_LITERAL\n";
+		return;
+	}
+	
+	
+	
 	int i;
 	for(i = 0; i < KEYWORD; i++){
 		if(word == token[i]){
-			cout << word << " " << token_t[i] << endl;
+			cout << word << "     " << token_t[i] << endl;
 			break;
 		}
 	}
 	if(i == KEYWORD){
 		tokenize_var(word, character);
 	}
-	
-	
-	
 }
 
 void Lexer::printArray(){
