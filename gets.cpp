@@ -2,12 +2,15 @@
 #define KEYWORD 41
 #define PUNK 22
 #define MAX_LENGTH 40
+#define MAX_STRING_LENGTH 82
 //how the functions do what they do
 //g++ lexer.cpp gets.cpp -o lexer
 Lexer::Lexer(const char* x){
 	file = x;
 	counter = 0;
 	point = 0;
+	parenthesis_count = 0;
+	string_length = 0;
 }
 
 void Lexer::findToken(){
@@ -26,7 +29,14 @@ void Lexer::findToken(){
 void Lexer::GetToken(string word, string character){
 	int sum = 0;
 	sum += character[0];
-	if((sum > 64) && (sum < 91)){
+	if(parenthesis_count > 0){
+		parenthesis(word);
+	}
+	else if(sum == 34){
+		parenthesis_arr[parenthesis_count] = word;
+		parenthesis_count++;
+	}
+	else if((sum > 64) && (sum < 91)){
 		tokenize_keyword(word, character);
 	}
 	else if((sum > 96) && (sum < 123)){
@@ -38,10 +48,36 @@ void Lexer::GetToken(string word, string character){
 	else{
 		tokenize_punk(word, character);
 	}
-	
-	
-	
 	return;
+}
+
+void Lexer::parenthesis(string word){
+	parenthesis_count++;
+	int sum = 0, i;
+	int wlength = word.length() -1;
+	string_length += word.length();
+	string compare;
+	compare = word[wlength];
+	
+	sum += compare[0];
+	
+	if(sum == 34){
+		parenthesis_arr[parenthesis_count] = word;
+		for(i = 0; i < parenthesis_count+1; i++){
+			cout << " " << parenthesis_arr[i];
+		}
+		cout << "     T_REAL_LITERAL\n";
+		if(string_length > MAX_STRING_LENGTH){
+		cout << "too many characters in this string\n";
+		}
+		parenthesis_count = 0;
+		cout << endl;
+		string_length = 0;
+		return;
+	}
+	parenthesis_arr[parenthesis_count] = word;
+	
+	
 }
 
 void Lexer::tokenize_var(string word, string character){
@@ -56,11 +92,48 @@ void Lexer::tokenize_var(string word, string character){
 	else{
 		cout << word << "     T_ID\n";
 	}
-	
 	return;
 }
 
+int Lexer::is_mantice(string word){
+	int i;
+	string compare;
+	for(i = 0; i < word.length(); i++){
+		compare = word[i];
+		if(compare == "."){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+//Double check if this is right man
+void Lexer::mantice(string word){
+	int wlength = word.length();
+	string compare;
+	int i;
+	for(i = 0; i < word.length(); i++){
+		compare = word[i];
+		if(compare == "E"){
+			cout << "     T_REAL_LITERAL\n";
+			break;
+		}
+	}
+	if(i > 9 || ((wlength-i) > 14)){
+		cout << "too many symbols in this mantissa\n";
+	}
+	else{
+		cout << word << endl;				//add the return variable here
+	}
+	
+	
+}
+
 void Lexer::tokenize_number(string word, string character){
+	if(is_mantice(word) > 0){
+		mantice(word);
+		return;
+	}
 	int i, n = 0;
 	int wlength = word.length();
 	string compare, zero = "0";
@@ -72,9 +145,12 @@ void Lexer::tokenize_number(string word, string character){
 		}
 		cout << "H\n";
 	}
-	else if(compare != "H"){
+	else if((compare != "H") && (compare != "X")){
 		cout << word;
 		cout << "     illegal hex integer literal\n";
+	}
+	else if(compare == "X"){
+		cout << word << "     T_CHAR_LITERAL\n";
 	}
 	else{										//does not take off leading zeros
 		for(n; n < word.length(); n++){

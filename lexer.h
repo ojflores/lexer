@@ -14,10 +14,12 @@ class Lexer{
 	private:
 		const char* file;
 		string array[SIZE];
-		string new_aww[SIZE];
 		string pulled_apart[SIZE];
+		string parenthesis_arr[SIZE];
 		int counter;
 		int point;
+		int parenthesis_count;
+		int string_length;
 		string punkTokens[22];
 		struct {
 			string* word;
@@ -44,17 +46,29 @@ class Lexer{
 		//seperates all the words into lexemes
 		void lexemeGenerator();
 		
+		//prints the array "pulled_apart"
 		void print_pulled_apart();
 		
-		void check_array();
-		
+		//gets the token of a given keyword
 		void tokenize_keyword(string, string);
 		
+		//gets the token of a given variable
 		void tokenize_var(string, string);
 		
+		//gets the token of either a number or a mantice, also decideds which is which
 		void tokenize_number(string, string);
 		
+		//gets the token of a punctuation symbol
 		void tokenize_punk(string, string);
+		
+		//handles when strings are in the input 
+		void parenthesis(string);
+		
+		//checks if a number given can be a mantice
+		int is_mantice(string);
+		
+		//handles the tokenization of the mantice
+		void mantice(string);
 	
 	
 };
