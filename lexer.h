@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+
 #include <fstream>
 #define SIZE 10000
 using namespace std;
@@ -12,6 +13,7 @@ class Lexer{
 	private:
 		const char* file;
 		string array[SIZE];
+		string new_aww[SIZE];
 		string pulled_apart[SIZE];
 		int counter;
 		int point;
@@ -38,8 +40,7 @@ class Lexer{
 		//seperates all the words into lexemes
 		void lexemeGenerator();
 		
-		//checks if the string is a keyword or not
-		void is_keyword();
+		void print_pulled_apart();
 	
 	
 };
