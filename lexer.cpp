@@ -15,8 +15,8 @@ int main(int argc, const char * argv[]){
 	//A.printArray();
 	
 	A.lexemeGenerator();
-	A.print_pulled_apart();
-	
+	//A.print_pulled_apart();
+	A.findToken();
 
 	
 	return 0;

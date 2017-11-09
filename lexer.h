@@ -5,6 +5,7 @@
 #include <cstring>
 #include <sstream>
 
+
 #include <fstream>
 #define SIZE 10000
 using namespace std;
@@ -28,8 +29,11 @@ class Lexer{
 		//constructor
 		Lexer(const char*);
 		
-		//takes the input and finds what token it is classified as
-		void GetToken();
+		//individually passes each word to find its token in GetToken
+		void findToken();
+		
+		//takes and assigns a token to each item
+		void GetToken(string, string);
 		
 		//prints array
 		void printArray();
@@ -43,6 +47,8 @@ class Lexer{
 		void print_pulled_apart();
 		
 		void check_array();
+		
+		void tokenize_keyword(string, string);
 	
 	
 };

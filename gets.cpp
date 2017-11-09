@@ -1,4 +1,6 @@
 #include "lexer.h"
+#define KEYWORD 41
+#define PUNK 22
 //how the functions do what they do
 //g++ lexer.cpp gets.cpp -o lexer
 Lexer::Lexer(const char* x){
@@ -7,11 +9,39 @@ Lexer::Lexer(const char* x){
 	point = 0;
 }
 
-void Lexer::GetToken(){
+void Lexer::findToken(){
 	int i = 0;
-	if(pulled_apart[i].length() > 0){
-		return;
+	string words, character;
+	for(i = 0; i < point; i++){
+		if(pulled_apart[i].length() > 0){
+			words = pulled_apart[i];
+			character = words[0];
+			GetToken(words, character);
+		}
 	}
+	
+}
+
+void Lexer::GetToken(string word, string character){
+	int sum = 0;
+	sum += character[0];
+	if((sum > 64) && (sum < 91)){
+		tokenize_keyword(word, character);
+	}
+	
+	
+	
+	return;
+}
+
+void Lexer::tokenize_keyword(string word, string character){
+	string token[KEYWORD] = {"ARRAY", "BEGIN", "BY", "BOOLEAN", "CASE", "CONST", "CHAR", "DIV", "DO", "ELSE", "ELSIF", "END", "EXIT", "FOR", "FALSE", "IF", "IMPORT",
+	"IN", "IS", "INTEGER", "LOOP", "MOD", "MODULE", "NIL", "NEW", "OF", "OR", "POINTER", "PROCEDURE", "RECORD", "REAL", "REPEAT", "RETURN", "THEN", "TO",
+	"TYPE", "TRUE", "UNTIL", "VAR", "WHILE", "WITH"};
+	
+	
+	
+	
 }
 
 void Lexer::printArray(){
@@ -44,7 +74,7 @@ void Lexer::openFile(){
 }
 
 void Lexer::lexemeGenerator(){
-	string punkTokens[22] = {"&", "^", "|", ":", ",", "=", ">", "{", "[", "(", "<", "-", "#", "+", "}", "]", ")", ";", "~", "/", "*"};
+	string punkTokens[PUNK] = {"&", "^", "|", ":", ",", "=", ">", "{", "[", "(", "<", "-", "#", "+", "}", "]", ")", ";", "~", "/", "*"};
 	int i, b, p;
 	string words, compare, token;
 	for(i = 0; i < counter; i++){				//for each item in the array
