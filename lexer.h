@@ -72,7 +72,9 @@ class Lexer{
 		
 		//handles the tokenization of the mantice
 		void mantice(string);
-	
+		
+		//handles the output
+		void put_out();
 	
 };
 

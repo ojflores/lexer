@@ -1,4 +1,5 @@
 #include "lexer.h"
+#include "yytype.h"
 #define KEYWORD 41
 #define PUNK 22
 #define MAX_LENGTH 40
@@ -105,7 +106,7 @@ void Lexer::tokenize_var(string word, string character){
 	int i;
 	string add;
 	if(word.length() > MAX_LENGTH){
-		cout << "     ID length is too long. 40 characters max\n";
+		cout << "ERROR, " << file << "ID length too long" << word << endl;
 		for(i = 0; i < MAX_LENGTH; i++){
 			cout << word[i];
 		}
@@ -145,19 +146,31 @@ void Lexer::mantice(string word){
 	string compare;
 	int i;
 	int identifier;
+	string add;
 	for(i = 0; i < word.length(); i++){
 		compare = word[i];
 		if(compare == "E"){
-			cout << "     T_REAL_LITERAL\n";
+			int identifier = 324;
+			add = word;
+			finally[token_counter].word[0] += add;
+			finally[token_counter].nCode = identifier; 
+		
+			token_counter++;
 			break;
 		}
 	}
 	if(i > 9 || ((wlength-i) > 14)){
-		cout << "too many symbols in this mantissa\n";
+		cout << "ERROR, " << file << "too many characters" << word << endl;
+		
 	}
 	else{
 		identifier = 327;
-		cout << word << identifier << endl;				//add the return variable here
+		
+		add = word;
+		finally[token_counter].word[0] += add;
+		finally[token_counter].nCode = identifier; 
+		
+		token_counter++;			//add the return variable here
 	}
 	
 	
@@ -165,6 +178,7 @@ void Lexer::mantice(string word){
 
 void Lexer::tokenize_number(string word, string character){
 	int identifier;
+	string add;
 	if(is_mantice(word) > 0){
 		mantice(word);
 		return;
@@ -174,26 +188,40 @@ void Lexer::tokenize_number(string word, string character){
 	string compare, zero = "0";
 	compare = word[wlength-1];
 	if(wlength > 10){
-		cout << word << "     integer literal too long\n";
+		cout << "ERROR, " << file << "Integer too long" << word << endl;
+		
 		for(i = 0; i < 10; i++){
-			cout << word[i];
+			add += word[i];
 		}
 		identifier = 325;
+		add = word;
+		finally[token_counter].word[0] += add;
+		finally[token_counter].nCode = identifier; 
+		
+		token_counter++;
+		
+		
 		cout << "H\n" << " " << identifier;
 	}
 	else if((compare != "H") && (compare != "X")){
 		cout << word;
-		cout << "     illegal hex integer literal\n";
+		cout << "ERROR, " << file << "No 'H' at the end of your hex number" << word << endl;
 	}
 	else if(compare == "X"){
 		identifier = 328;
-		cout << word << "     T_CHAR_LITERAL\n" << identifier;
+		add = word;
+		finally[token_counter].word[0] += add;
+		finally[token_counter].nCode = identifier; 
+		token_counter++;
 	}
 	else{										//does not take off leading zeros
+		identifier = 325;
 		for(n; n < word.length(); n++){
-			cout << word[n];
+			add += word[n];
 		}
-		 cout << "      T_INT_LITERAL";
+		finally[token_counter].word[0] += add;
+		finally[token_counter].nCode = identifier; 
+		token_counter++;
 	}
 	cout << endl;
 	return;
@@ -203,16 +231,20 @@ void Lexer::tokenize_punk(string word, string character){
 	string punkTokens[PUNK] = {"&", "^", "|", ":", ",", "=", ">", "{", "[", "(", "<", "-", "#", "+", "}", "]", ")", ";", "~", "/", "*"};
 	int punkTokens_t[PUNK] = {292, 293, 295, 296, 297, 300, 301, 303, 304, 305, 306, 308, 309, 310, 311, 312,
 	313, 314, 315, 316, 317};
+	string add;
 	int i;
 	for(i = 0; i < PUNK; i++){
 		if(word == punkTokens[i]){
 			int identifier = punkTokens_t[i];
-			cout << word << "     " << identifier << endl;
+			add = punkTokens[i];
+			finally[token_counter].word[0] += add;
+			finally[token_counter].nCode = identifier; 
+			token_counter++;
 			break;
 		}
 	}
 	if( i == PUNK){
-		cout << word << "      << I'm sorry but that is an illegal symbol\n";
+		cout << "ERROR, " << file << "Unknown character" << word << endl;
 	}
 	
 	
@@ -236,26 +268,32 @@ void Lexer::tokenize_keyword(string word, string character){
 						277, 276, 278, 279, 280, 281,
 						282, 322, 283, 284, 285, 286,
 						287, 323, 288, 289, 290, 291};
-	
 	int identifier;
 	int wlength = word.length();
 	string compare;
 	compare = word[wlength-1];
-	
+	string add;
 	
 	if((compare == "X") && (word.length() <= 4)){
 		identifier = 328;
-		cout << word << "     T_CHAR_LITERAL" << identifier << endl;
+		add = word;
+		finally[token_counter].word[0] += add;
+		finally[token_counter].nCode = identifier; 
+		token_counter++;
+		
 		return;
 	}
 	
-	
+	 
 	
 	int i;
 	for(i = 0; i < KEYWORD; i++){
 		if(word == token[i]){
 			identifier = token_t[i];
-			cout << word << "     " << identifier << endl;
+			add = word;
+			finally[token_counter].word[0] += add;
+			finally[token_counter].nCode = identifier; 
+			token_counter++;
 			break;
 		}
 	}
@@ -279,6 +317,8 @@ void Lexer::print_pulled_apart(){
 		i++;
 	}
 }
+
+
 
 void Lexer::openFile(){
 	ifstream readFile;
@@ -318,4 +358,230 @@ void Lexer::lexemeGenerator(){
 		}
 		point++;	
 	}	
+}
+
+void Lexer::put_out(){
+	int i;
+	for(i = 0; i < token_counter; i++){
+		switch (finally[i].nCode)
+        {
+            case T_ARRAY:
+                cout << "keyword: ARRAY\n";
+                break;
+            case T_BEGIN:
+                cout << "keyword: BEGIN\n";
+                break;
+            case T_BY:
+                cout << "keyword: BY\n";
+                break;
+            case T_CASE:
+                cout << "keyword: CASE\n";
+                break;
+            case T_CONST:
+                cout << "keyword: CONST\n";
+                break;
+            case T_DIV:
+                cout << "keyword: DIV\n";
+                break;
+            case T_DO:
+                cout << "keyword: DO\n";
+                break;
+            case T_ELSE:
+                cout << "keyword: ELSE\n";
+                break;
+            case T_ELSIF:
+                cout << "keyword: ELSIF\n";
+                break;
+            case T_END:
+                cout << "keyword: END\n";
+                break;
+            case T_EXIT:
+                cout << "keyword: EXIT\n";
+                break;
+            case T_FOR:
+                cout << "keyword: FOR\n";
+                break;
+            case T_IF:
+                cout << "keyword: IF\n";
+                break;
+            case T_IMPORT:
+                cout << "keyword: IMPORT\n";
+                break;
+            case T_IN:
+                cout << "keyword: IN\n";
+                break;
+            case T_IS:
+                cout << "keyword: IS\n";
+                break;
+            case T_LOOP:
+                cout << "keyword: LOOP\n";
+                break;
+            case T_MOD:
+                cout << "keyword: MOD\n";
+                break;
+            case T_MODULE:
+                cout << "keyword: MODULE\n";
+                break;
+            case T_NIL:
+                cout << "keyword: NIL\n";
+                break;
+            case T_OF:
+                cout << "keyword: OF\n";
+                break;
+            case T_OR:
+                cout << "keyword: OR\n";
+                break;
+            case T_POINTER:
+                cout << "keyword: POINTER\n";
+                break;
+            case T_PROCEDURE:
+                cout << "keyword: PROCEDURE\n";
+                break;
+            case T_RECORD:
+                cout << "keyword: RECORD\n";
+                break;
+            case T_REPEAT:
+                cout << "keyword: REPEAT\n";
+                break;
+            case T_RETURN:
+                cout << "keyword: RETURN\n";
+                break;
+            case T_THEN:
+                cout << "keyword: THEN\n";
+                break;
+            case T_TO:
+                cout << "keyword: TO\n";
+                break;
+            case T_TYPE:
+                cout << "keyword: TYPE\n";
+                break;
+            case T_UNTIL:
+                cout << "keyword: UNTIL\n";
+                break;
+            case T_VAR:
+                cout << "keyword: VAR\n";
+                break;
+            case T_WHILE:
+                cout << "keyword: WHILE\n";
+                break;
+            case T_WITH:
+                cout << "keyword: WITH\n";
+                break;
+            case T_BOOLEAN:
+                cout << "predef id: BOOLEAN\n";
+                break;
+            case T_CHAR:
+                cout << "predef id: CHAR\n";
+                break;
+            case T_FALSE:
+                cout << "predef id: FALSE\n";
+                break;
+            case T_INTEGER:
+                cout << "predef id: INTEGER\n";
+                break;
+            case T_NEW:
+                cout << "predef id: NEW\n";
+                break;
+            case T_REAL:
+                cout << "predef id: REAL\n";
+                break;
+            case T_TRUE:
+                cout << "predef id: TRUE\n";
+                break;
+            case T_AMPERSAND:
+                cout << "punctuation: AMPERSAND\n";
+                break;
+            case T_ARROW:
+                cout << "punctuation: ARROW\n";
+                break;
+            case T_ASSIGN:
+                cout << "punctuation: ASSIGN\n";
+                break;
+            case T_BAR:
+                cout << "punctuation: BAR\n";
+                break;
+            case T_COLON:
+                cout << "punctuation: COLON\n";
+                break;
+            case T_COMMA:
+                cout << "punctuation: COMMA\n";
+                break;
+            case T_DOTDOT:
+                cout << "punctuation: DOTDOT\n";
+                break;
+            case T_DOT:
+                cout << "punctuation: DOT\n";
+                break;
+            case T_EQU:
+                cout << "punctuation: EQU\n";
+                break;
+            case T_GT:
+                cout << "punctuation: GT\n";
+                break;
+            case T_GTE:
+                cout << "punctuation: GTE\n";
+                break;
+            case T_LBRACE:
+                cout << "punctuation: LBRACE\n";
+                break;
+            case T_LBRACKET:
+                cout << "punctuation: LBRACKET\n";
+                break;
+            case T_LPAREN:
+                cout << "punctuation: LPAREN\n";
+                break;
+            case T_LT:
+                cout << "punctuation: LT\n";
+                break;
+            case T_LTE:
+                cout << "punctuation: LTE\n";
+                break;
+            case T_MINUS:
+                cout << "punctuation: MINUS\n";
+                break;
+            case T_NEQ:
+                cout << "punctuation: NEQ\n";
+                break;
+            case T_PLUS:
+                cout << "punctuation: PLUS\n";
+                break;
+            case T_RBRACE:
+                cout << "punctuation: RBRACE\n";
+                break;
+            case T_RBRACKET:
+                cout << "punctuation: RBRACKET\n";
+                break;
+            case T_RPAREN:
+                cout << "punctuation: RPAREN\n";
+                break;
+            case T_SEMI:
+                cout << "punctuation: SEMI\n";
+                break;
+            case T_SLASH:
+                cout << "punctuation: SLASH\n";
+                break;
+            case T_STAR:
+                cout << "punctuation: STAR\n";
+                break;
+            case T_TILDE:
+                cout << "punctuation: TILDE\n";
+                break;
+            case T_ID:
+                cout << "identifier\n";
+                break;
+            case T_INT_LITERAL:
+                cout << "integer literal\n";
+                break;
+            case T_STR_LITERAL:
+                cout << "string literal\n";
+                break;
+            case T_REAL_LITERAL:
+                cout << "real literal\n";
+                break;
+            case T_CHAR_LITERAL:
+                cout << "character literal\n";
+                break;
+        }
+
+	}
 }
