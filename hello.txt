@@ -2,4 +2,9 @@ ARRAY;THIS IS WHAT THE )() THING CAN DO
 ::: ;; 
 ELSE(){
 	hello world
-} WHATELSEDO
+} WHATELSEDO 0478374H 0FFX
+?
+"hello over thereasdofna;fnaskdnaodoidjf;aosjf;ansdvans;vlnas;oighasjf;oaeijfe;oifajsdlknvndkasdv;gjsf"
+199494jsjgds
+1.000
+100000494909392039
