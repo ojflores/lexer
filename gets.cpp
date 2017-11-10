@@ -270,12 +270,4 @@ void Lexer::lexemeGenerator(){
 		point++;	
 	}	
 }
-
-
-
-
-
-
-
-
-
+s
