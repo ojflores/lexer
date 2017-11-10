@@ -11,18 +11,23 @@ Lexer::Lexer(const char* x){
 	point = 0;
 	parenthesis_count = 0;
 	string_length = 0;
+	token_counter = 0;
+	finally = new Token[SIZE];
 }
 
 void Lexer::findToken(){
 	int i = 0;
 	string words, character;
+	
 	for(i = 0; i < point; i++){
 		if(pulled_apart[i].length() > 0){
+			
 			words = pulled_apart[i];
 			character = words[0];
 			GetToken(words, character);
 		}
 	}
+	
 	
 }
 
@@ -58,6 +63,7 @@ void Lexer::parenthesis(string word){
 	int wlength = word.length() -1;
 	string_length += word.length();
 	string compare;
+	string add;
 	compare = word[wlength];
 	
 	sum += compare[0];
@@ -65,12 +71,25 @@ void Lexer::parenthesis(string word){
 	if(sum == 34){
 		identifier = 326;
 		parenthesis_arr[parenthesis_count] = word;
-		for(i = 0; i < parenthesis_count+1; i++){
-			cout << " " << parenthesis_arr[i];
-		}
-		cout << "     T_REAL_LITERAL\n";
+		
 		if(string_length > MAX_STRING_LENGTH){
-		cout << "too many characters in this string" << identifier << endl;
+			
+			for(i = 0; i < MAX_STRING_LENGTH; i++){
+				add += parenthesis_arr[i];
+				
+			}
+			finally[token_counter].word[i] += add;
+			finally[token_counter].nCode = identifier; 
+			cout << "too many characters in this string" << identifier << endl;
+			token_counter++;
+		}
+		else{
+			for(i = 0; i < parenthesis_count+1; i++){
+				add += parenthesis_arr[i];
+			}
+			finally[token_counter].word[0] += add;
+			finally[token_counter].nCode = identifier;
+			token_counter++;
 		}
 		parenthesis_count = 0;
 		cout << endl;
@@ -84,16 +103,26 @@ void Lexer::parenthesis(string word){
 
 void Lexer::tokenize_var(string word, string character){
 	int i;
+	string add;
 	if(word.length() > MAX_LENGTH){
 		cout << "     ID length is too long. 40 characters max\n";
 		for(i = 0; i < MAX_LENGTH; i++){
 			cout << word[i];
 		}
+		int identifier = 324;
+		add = word;
+		finally[token_counter].word[0] += add;
+		finally[token_counter].nCode = identifier; 
+		token_counter++;
 		cout << endl;
 	}
 	else{
 		int identifier = 324;
-		cout << word << "     T_ID" << identifier << endl;
+		add = word;
+		finally[token_counter].word[0] += add;
+		finally[token_counter].nCode = identifier; 
+		
+		token_counter++;
 	}
 	return;
 }

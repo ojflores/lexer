@@ -22,9 +22,11 @@ class Lexer{
 		int string_length;
 		string punkTokens[22];
 		struct Token{
-			string* word;
+			string word[84];
 			int nCode;
 		};
+		Token * finally;
+		int token_counter;
 		
 	public:
 		
