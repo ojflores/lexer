@@ -52,6 +52,7 @@ void Lexer::GetToken(string word, string character){
 }
 
 void Lexer::parenthesis(string word){
+	int identifier;
 	parenthesis_count++;
 	int sum = 0, i;
 	int wlength = word.length() -1;
@@ -62,13 +63,14 @@ void Lexer::parenthesis(string word){
 	sum += compare[0];
 	
 	if(sum == 34){
+		identifier = 326;
 		parenthesis_arr[parenthesis_count] = word;
 		for(i = 0; i < parenthesis_count+1; i++){
 			cout << " " << parenthesis_arr[i];
 		}
 		cout << "     T_REAL_LITERAL\n";
 		if(string_length > MAX_STRING_LENGTH){
-		cout << "too many characters in this string\n";
+		cout << "too many characters in this string" << identifier << endl;
 		}
 		parenthesis_count = 0;
 		cout << endl;
@@ -90,7 +92,8 @@ void Lexer::tokenize_var(string word, string character){
 		cout << endl;
 	}
 	else{
-		cout << word << "     T_ID\n";
+		int identifier = 324;
+		cout << word << "     T_ID" << identifier << endl;
 	}
 	return;
 }
@@ -112,6 +115,7 @@ void Lexer::mantice(string word){
 	int wlength = word.length();
 	string compare;
 	int i;
+	int identifier;
 	for(i = 0; i < word.length(); i++){
 		compare = word[i];
 		if(compare == "E"){
@@ -123,13 +127,15 @@ void Lexer::mantice(string word){
 		cout << "too many symbols in this mantissa\n";
 	}
 	else{
-		cout << word << endl;				//add the return variable here
+		identifier = 327;
+		cout << word << identifier << endl;				//add the return variable here
 	}
 	
 	
 }
 
 void Lexer::tokenize_number(string word, string character){
+	int identifier;
 	if(is_mantice(word) > 0){
 		mantice(word);
 		return;
@@ -143,14 +149,16 @@ void Lexer::tokenize_number(string word, string character){
 		for(i = 0; i < 10; i++){
 			cout << word[i];
 		}
-		cout << "H\n";
+		identifier = 325;
+		cout << "H\n" << " " << identifier;
 	}
 	else if((compare != "H") && (compare != "X")){
 		cout << word;
 		cout << "     illegal hex integer literal\n";
 	}
 	else if(compare == "X"){
-		cout << word << "     T_CHAR_LITERAL\n";
+		identifier = 328;
+		cout << word << "     T_CHAR_LITERAL\n" << identifier;
 	}
 	else{										//does not take off leading zeros
 		for(n; n < word.length(); n++){
@@ -164,12 +172,13 @@ void Lexer::tokenize_number(string word, string character){
 
 void Lexer::tokenize_punk(string word, string character){
 	string punkTokens[PUNK] = {"&", "^", "|", ":", ",", "=", ">", "{", "[", "(", "<", "-", "#", "+", "}", "]", ")", ";", "~", "/", "*"};
-	string punkTokens_t[PUNK] = {"T_&", "T_^", "T_|", "T_:", "T_,", "T_=", "T_>", "T_{", "T_[", "T_(", "T_<", "T_-", "T_#", "T_+", "T_}", "T_]",
-	"T_)", "T_;", "T_~", "T_/", "T_*"};
+	int punkTokens_t[PUNK] = {292, 293, 295, 296, 297, 300, 301, 303, 304, 305, 306, 308, 309, 310, 311, 312,
+	313, 314, 315, 316, 317};
 	int i;
 	for(i = 0; i < PUNK; i++){
 		if(word == punkTokens[i]){
-			cout << word << "     " << punkTokens_t[i] << endl;
+			int identifier = punkTokens_t[i];
+			cout << word << "     " << identifier << endl;
 			break;
 		}
 	}
@@ -183,21 +192,31 @@ void Lexer::tokenize_punk(string word, string character){
 
 //what if they are not a keyword?
 void Lexer::tokenize_keyword(string word, string character){
-	string token[KEYWORD] = {"ARRAY", "BEGIN", "BY", "BOOLEAN", "CASE", "CONST", "CHAR", "DIV", "DO", "ELSE", "ELSIF", "END", "EXIT", "FOR", "FALSE", "IF", "IMPORT",
-	"IN", "IS", "INTEGER", "LOOP", "MOD", "MODULE", "NIL", "NEW", "OF", "OR", "POINTER", "PROCEDURE", "RECORD", "REAL", "REPEAT", "RETURN", "THEN", "TO",
-	"TYPE", "TRUE", "UNTIL", "VAR", "WHILE", "WITH"};
-	string token_t[KEYWORD] = {"T_ARRAY", "T_BEGIN", "T_BY", "T_BOOLEAN", "T_CASE", "T_ONST", "T_CHAR", "T_DIV", "T_DO", "T_ELSE", "T_ELSIF", "T_END", "T_EXIT", "T_FOR", "T_FALSE", "T_IF", "T_IMPORT",
-	"T_IN", "T_IS", "T_INTEGER", "T_LOOP", "T_MOD", "T_MODULE", "T_NIL", "T_NEW", "T_OF", "T_OR", "T_POINTER", "T_PROCEDURE", "T_RECORD", "T_REAL", "T_REPEAT", "T_RETURN", "T_THEN", "T_TO",
-	"T_TYPE", "T_TRUE", "T_UNTIL", "T_VAR", "T_WHILE", "T_WITH"};
+	string token[KEYWORD] = {"ARRAY", "BEGIN", "BY", "BOOLEAN", "CASE", "CONST", 
+						"CHAR", "DIV", "DO", "ELSE", "ELSIF", "END",
+						"EXIT", "FOR", "FALSE", "IF", "IMPORT",
+						"IN", "IS", "INTEGER", "LOOP", "MOD", 
+						"MODULE", "NIL", "NEW", "OF", "OR", 
+						"POINTER", "PROCEDURE", "RECORD", "REAL",
+						"REPEAT", "RETURN", "THEN", "TO","TYPE",
+						"TRUE", "UNTIL", "VAR", "WHILE", "WITH"};
+	int token_t[KEYWORD] = {257, 258, 259, 318, 260,
+						261, 319, 262, 263, 264, 265, 
+						266, 267, 268, 320, 269, 270,
+						271, 272, 321, 273, 274, 275,
+						277, 276, 278, 279, 280, 281,
+						282, 322, 283, 284, 285, 286,
+						287, 323, 288, 289, 290, 291};
 	
-	
+	int identifier;
 	int wlength = word.length();
 	string compare;
 	compare = word[wlength-1];
 	
 	
 	if((compare == "X") && (word.length() <= 4)){
-		cout << word << "     T_CHAR_LITERAL\n";
+		identifier = 328;
+		cout << word << "     T_CHAR_LITERAL" << identifier << endl;
 		return;
 	}
 	
@@ -206,7 +225,8 @@ void Lexer::tokenize_keyword(string word, string character){
 	int i;
 	for(i = 0; i < KEYWORD; i++){
 		if(word == token[i]){
-			cout << word << "     " << token_t[i] << endl;
+			identifier = token_t[i];
+			cout << word << "     " << identifier << endl;
 			break;
 		}
 	}
@@ -270,4 +290,3 @@ void Lexer::lexemeGenerator(){
 		point++;	
 	}	
 }
-s

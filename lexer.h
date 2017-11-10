@@ -21,10 +21,11 @@ class Lexer{
 		int parenthesis_count;
 		int string_length;
 		string punkTokens[22];
-		struct {
+		struct Token{
 			string* word;
 			int nCode;
 		};
+		
 	public:
 		
 		
